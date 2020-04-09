@@ -51,12 +51,17 @@ public class UserController {
         // Trả về jwt cho người dùng.
         User user = userService.getUserByName(loginRequest.getUsername());
         String jwt = tokenProvider.generateToken((CustomUserDetails) authentication.getPrincipal());
-        return new LoginResponse(jwt, user.getLastName());
+        return new LoginResponse(jwt, String.valueOf(user.getId()));
     }
-	@GetMapping("/random")
+	@GetMapping("/admin")
 	@PreAuthorize("hasAuthority('ADMIN_USER')")
 	public RandomStuff randomStuff() {
-		return new RandomStuff("JWT Hợp lệ mới có thể thấy được message này");
+		return new RandomStuff("JWT Hợp lệ ADMIN mới có thể thấy được message này");
 	}
-
+	
+	@GetMapping("/user")
+	@PreAuthorize("hasAuthority('STANDARD_USER')")
+	public RandomStuff randomStuffUser() {
+		return new RandomStuff("JWT Hợp lệ USER có thể thấy được message này");
+	}
 }
